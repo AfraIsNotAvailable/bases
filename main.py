@@ -48,6 +48,31 @@ def print_menu():
     for key in menu_options.keys():
         print(key, "~", menu_options[key])
 
+def getLastCharDumb(n: str) -> int:
+    if (n[-1] == 'A'):
+        return 10
+    if (n[-1] == 'B'):
+        return 11
+    if (n[-1] == 'C'):
+        return 12
+    if (n[-1] == 'D'):
+        return 13
+    if (n[-1] == 'E'):
+        return 14
+    if (n[-1] == 'F'):
+        return 15
+    if (n[-1] > '0' and n[-1] < '9'):
+        return int(n[-1])
+
+def getLastCharSmart(n: str) -> int:
+    return int(n[-1], 16)
+
+def toHex(n: int) -> str:
+    if n < 10:
+        return str(n)
+    c = n + 55
+    return chr(c)
+
 
 # addition (a, b) in a given base (base)
 def add(a: str, b: str, base: int) -> str:
@@ -61,7 +86,7 @@ def add(a: str, b: str, base: int) -> str:
 
         maxx = max(len(str(a)), len(str(b)))
 
-        for i in range(1, maxx + 1):
+        for _ in range(1, maxx + 1):
             _sum = _sum + ((a % 10 + b % 10 + carry) % base) * p
             if (a % 10 + b % 10 + carry) >= base:
                 carry = 1
@@ -69,10 +94,33 @@ def add(a: str, b: str, base: int) -> str:
                 carry = 0
             a, b = a // 10, b // 10
             p *= 10
+        if carry > 0:
+            _sum = _sum + carry * p
         _sum = str(_sum)
     elif base == 16:
         _sum = ''
-        pass
+        carry = 0
+        
+        maxx = max(len(a), len(b))
+        
+        while len(a) != len(b):
+            if len(a) < len(b):
+                a = '0' + a
+            else:
+                b = '0' + b
+        
+        for _ in range(0, maxx):
+            if (getLastCharSmart(a) + getLastCharSmart(b) + carry) >= 16:
+                _sum = toHex(getLastCharSmart(a) + getLastCharSmart(b) + carry - 16) + _sum
+                carry = 1
+            else:
+                _sum = toHex(getLastCharSmart(a) + getLastCharSmart(b) + carry) + _sum
+                carry = 0
+            a, b = a[:-1], b[:-1]
+        if carry > 0:
+            s = str(carry) + _sum[0]
+            _sum[0] = toHex(getLastCharSmart(s))
+        
     return _sum
 
 
