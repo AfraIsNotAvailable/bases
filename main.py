@@ -50,20 +50,29 @@ def print_menu():
 
 
 # addition (a, b) in a given base (base)
-def add(a, b, base):
+def add(a: str, b: str, base: int) -> str:
+    _sum = 0
     if base <= 10:
+        a = int(a)
+        b = int(b)
         _sum = 0
         carry = 0
         p = 1
 
         maxx = max(len(str(a)), len(str(b)))
 
-        for i in range(1, maxx + 1, 1):
+        for i in range(1, maxx + 1):
             _sum = _sum + ((a % 10 + b % 10 + carry) % base) * p
-            carry = 1 if (a % 10 + b % 10 + carry) >= base else 0
+            if (a % 10 + b % 10 + carry) >= base:
+                carry = 1
+            else:
+                carry = 0
             a, b = a // 10, b // 10
             p *= 10
-    # TODO: addition with base 16
+        _sum = str(_sum)
+    elif base == 16:
+        _sum = ''
+        pass
     return _sum
 
 
@@ -102,39 +111,41 @@ def rapid_conversions():
     pass
 
 
-sum = add(546, 248, 9)
-print(sum)
-
 # mainu
-# while True:
-#     option = int(input("\nEnter an option from the menu: "))
-#     print("")
-#     if option == 1:
-#         print("opt1")
+if __name__ == "__main__":
+    while True:
+        option = int(input("\nEnter an option from the menu: "))
+        print("")
+        if option == 1:
+            print("Addition\n")
+            base = int(input("Enter a base you want to work with: base = "))
+            a = input(f"Enter number in base {base} a= ")
+            b = input(f"Enter number in base {base} b= ")
+            print(add(a, b, base))
 
-#     elif option == 2:
-#         print("opt2")
+    #     elif option == 2:
+    #         print("opt2")
 
-#     elif option == 3:
-#         print("opt3")
+    #     elif option == 3:
+    #         print("opt3")
 
-#     elif option == 4:
-#         print("opt4")
+    #     elif option == 4:
+    #         print("opt4")
 
-#     elif option == 5:
-#         print("opt5")
+    #     elif option == 5:
+    #         print("opt5")
 
-#     elif option == 6:
-#         print("opt6")
+    #     elif option == 6:
+    #         print("opt6")
 
-#     elif option == 7:
-#         print("opt6")
+    #     elif option == 7:
+    #         print("opt6")
 
-#     elif option == 8:
-#         print("opt6")
+    #     elif option == 8:
+    #         print("opt6")
 
-#     elif option == 9:
-#         print("You exited the program, thank you!")
-#         exit()
-#     else:
-#         print("Invalid option, please enter a number between 1 and 9.")
+        elif option == 9:
+            print("You exited the program, thank you!")
+            exit()
+        else:
+            print("Invalid option, please enter a number between 1 and 9.")
