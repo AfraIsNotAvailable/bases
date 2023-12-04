@@ -107,40 +107,44 @@ def add(a: str, b: str, base: int) -> str:
         maxx = max(len(str(a)), len(str(b)))
 
         for _ in range(1, maxx + 1):
-            _sum = _sum + ((a % 10 + b % 10 + carry) % base) * p
-            if (a % 10 + b % 10 + carry) >= base:
-                carry = 1
-            else:
-                carry = 0
-            a, b = a // 10, b // 10
+            digit_sum = a % 10 + b % 10 + carry
+            _sum += (digit_sum % base) * p
+            carry = digit_sum // base
+            a //= 10
+            b //= 10
             p *= 10
+
         if carry > 0:
-            _sum = _sum + carry * p
+            _sum += carry * p
+
         _sum = str(_sum)
     elif base == 16:
         _sum = ''
         carry = 0
-        
+
         maxx = max(len(a), len(b))
-        
+
         while len(a) != len(b):
             if len(a) < len(b):
                 a = '0' + a
             else:
                 b = '0' + b
-        
+
         for _ in range(0, maxx):
-            if (getLastCharSmart(a) + getLastCharSmart(b) + carry) >= 16:
-                _sum = toHex(getLastCharSmart(a) + getLastCharSmart(b) + carry - 16) + _sum
+            digit_sum = getLastCharSmart(a) + getLastCharSmart(b) + carry
+            if digit_sum >= 16:
+                _sum = toHex(digit_sum - 16) + _sum
                 carry = 1
             else:
-                _sum = toHex(getLastCharSmart(a) + getLastCharSmart(b) + carry) + _sum
+                _sum = toHex(digit_sum) + _sum
                 carry = 0
-            a, b = a[:-1], b[:-1]
+            a = a[:-1]
+            b = b[:-1]
+
         if carry > 0:
             s = str(carry) + _sum[0]
-            _sum[0] = toHex(getLastCharSmart(s))
-        
+            _sum = toHex(getLastCharSmart(s)) + _sum[1:]
+
     return _sum
 
 
