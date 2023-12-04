@@ -65,13 +65,33 @@ def getLastCharDumb(n: str) -> int:
         return int(n[-1])
 
 def getLastCharSmart(n: str) -> int:
+    """
+    Converts the last character of a given string n to an integer, treating the character as a hexadecimal digit.
+
+    Args:
+        n (str): The input string.
+
+    Returns:
+        int: The integer representation of the last character.
+
+    """
     return int(n[-1], 16)
 
-def toHex(n: int) -> str:
+    
+def toHex(n: int) -> str: # n in [0, 15], takes a number and returns its hex representation
+    """
+    Converts a number to its hexadecimal representation.
+
+    Args:
+        n (int): The number to be converted. Must be in the range [0, 15].
+
+    Returns:
+        str: The hexadecimal representation of the number.
+    """
     if n < 10:
         return str(n)
-    c = n + 55
-    return chr(c)
+    char_in_unicode = n + 55    #? 55 = ord('A') - 10 -- ord('A') = 65; representing the character in unicode
+    return chr(char_in_unicode)
 
 
 # addition (a, b) in a given base (base)
