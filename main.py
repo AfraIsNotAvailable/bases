@@ -37,6 +37,9 @@ import os
 
 
 def print_menu():
+    """
+    Prints the menu options for the application.
+    """
     menu_options = {
         1: "Add two numbers in a given base",
         2: "Subtract two numbers in a given base",
@@ -51,6 +54,15 @@ def print_menu():
 
 
 def getLastCharDumb(n: str) -> int:
+    """
+    Returns the last character of a string as an integer.
+
+    Args:
+        n (str): The input string.
+
+    Returns:
+        int: The integer representation of the last character.
+    """
     if n[-1] == "A":
         return 10
     if n[-1] == "B":
@@ -82,16 +94,34 @@ def getLastCharSmart(n: str) -> int:
 
 
 def getFirstTwoChars(n: str) -> int:
+    """
+    Returns the first two characters of a string as an integer.
+
+    Args:
+        n (str): The input string.
+
+    Returns:
+        int: The integer representation of the first two characters.
+    """
     return int(t2s(n[:2]), 16)
 
 
 def getFirstChar(n: str) -> int:
+    """
+    Returns the first character of a string as an integer.
+
+    Args:
+        n (str): The input string.
+
+    Returns:
+        int: The integer representation of the first character.
+    """
     return int(n[0], 16)
 
 
 def toHex(
     n: int,
-) -> str:  # n in [0, 15], takes a number and returns its hex representation
+) -> str:
     """
     Converts a number to its hexadecimal representation.
 
@@ -111,6 +141,16 @@ def toHex(
 
 
 def to_decimal(num, base):
+    """
+    Converts a number from a given base to decimal.
+
+    Args:
+        num (int): The number to be converted.
+        base (int): The base of the number.
+
+    Returns:
+        int: The decimal representation of the number.
+    """
     res, power = 0, 1
     while num > 0:
         digit = num % 10
@@ -121,6 +161,16 @@ def to_decimal(num, base):
 
 
 def to_base(num, base):
+    """
+    Converts a number from decimal to a given base.
+
+    Args:
+        num (int): The number to be converted.
+        base (int): The base to convert to.
+
+    Returns:
+        int: The number in the given base.
+    """
     res, power = 0, 1
     while num > 0:
         digit = num % base
@@ -148,6 +198,17 @@ def t2s(t: tuple) -> str:
 
 # addition (a, b) in a given base (base)
 def add(a: str, b: str, base: int) -> str:
+    """
+    Adds two numbers in a given base.
+
+    Args:
+        a (str): The first number.
+        b (str): The second number.
+        base (int): The base of the numbers.
+
+    Returns:
+        str: The sum of the two numbers in the given base.
+    """
     _sum = 0
     if base <= 10:
         a = int(a)
@@ -202,6 +263,17 @@ def add(a: str, b: str, base: int) -> str:
 
 # subtraction (a, b) in a given base (base)
 def sub(a, b, base):
+    """
+    Subtracts two numbers in a given base.
+
+    Args:
+        a (str): The first number.
+        b (str): The second number.
+        base (int): The base of the numbers.
+
+    Returns:
+        str: The difference of the two numbers in the given base.
+    """
     if base <= 10:
         a = int(a)
         b = int(b)
@@ -257,6 +329,17 @@ def sub(a, b, base):
 
 # multiplication (a*b) in a base (base) by 1 digit (b)
 def multiply_1_digit(a, b, base):
+    """
+    Multiplies a number by a digit in a given base.
+
+    Args:
+        a (str): The number to be multiplied.
+        b (str): The digit to multiply by.
+        base (int): The base of the number.
+
+    Returns:
+        str: The product of the number and the digit in the given base.
+    """
     if base <= 10:
         a = int(a)
         b = int(b)
@@ -301,6 +384,17 @@ def multiply_1_digit(a, b, base):
 
 # division (a/b) in a base (base) by 1 digit (b)
 def divide_1_digit(a, b, base):
+    """
+    Divides a number by a digit in a given base.
+
+    Args:
+        a (str): The number to be divided.
+        b (str): The digit to divide by.
+        base (int): The base of the number.
+
+    Returns:
+        tuple: The quotient and remainder of the division in the given base.
+    """
     # divide a number 'a' by a digit 'b' in a given base 'base'
     if base <= 10:
         remainder = int(a)
@@ -350,6 +444,17 @@ def divide_1_digit(a, b, base):
 
 # successive divisions (from BASE -> base) (@params: n, BASE, base)
 def successive_div_conversion(n: str, BASE: int, base: int) -> str:
+    """
+    Converts a number from one base to another using the method of successive divisions.
+
+    Args:
+        n (str): The number to be converted.
+        BASE (int): The base of the input number.
+        base (int): The base to convert to.
+
+    Returns:
+        str: The converted number in the new base.
+    """
     if BASE <= 10:
         n = int(n)
         list_of_remainders = []
@@ -375,10 +480,20 @@ def successive_div_conversion(n: str, BASE: int, base: int) -> str:
 
 # substitution method
 def substitution_conversion(n: str, BASE: int, base: int) -> str:
+    """
+    Converts a number from one base to another using the substitution method.
+
+    Args:
+        n (str): The number to be converted.
+        BASE (int): The base of the input number.
+        base (int): The base to convert to.
+
+    Returns:
+        str: The converted number in the new base.
+    """
     if BASE <= 10:
         # n = int(n)
         _sum = 0
-
         for i in range(0, len(str(n))):
             digit = int(n[-1])
             for _ in range(0, i):
