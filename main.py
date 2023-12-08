@@ -38,13 +38,12 @@ import os
 
 def print_menu():
     menu_options = {
-        1: "Read a list of complex numbers from the console",
-        2: "Display the entire list of numbers to the console",
-        3: "Display the length and elements of a longest subarray of numbers that contain at most 3 distinct values and"
-        " print the length and elements \n    of a maximum subarray sum, when considering each number's real part",
-        4: "ceva",
-        5: "ceva",
-        6: "ceva",
+        1: "Add two numbers in a given base",
+        2: "Subtract two numbers in a given base",
+        3: "Multiply a number by a digit in a given base",
+        4: "Divide a number by a digit in a given base",
+        5: "Convert a number from a base to another using successive divisions",
+        6: "Convert a number from a base to another using substitution method",
         7: "Exit the program",
     }
     for key in menu_options.keys():
@@ -102,6 +101,7 @@ def toHex(
     Returns:
         str: The hexadecimal representation of the number.
     """
+    n = int(n)
     if n < 10:
         return str(n)
     char_in_unicode = (
@@ -303,56 +303,89 @@ def multiply_1_digit(a, b, base):
 def divide_1_digit(a, b, base):
     # divide a number 'a' by a digit 'b' in a given base 'base'
     if base <= 10:
-        a = int(a)
+        remainder = int(a)
         b = int(b)
 
         finalValue = 0
 
-        while a > b:
+        while remainder > b:
             power = 1
 
-            while power * 10 < a:
+            while power * 10 < remainder:
                 power *= 10
-            d = a // power
+            d = remainder // power
 
             if d < b:
                 power //= 10
-                d = a // power
+                d = remainder // power
 
             d = to_decimal(d, base)
             carry = d % b
             finalValue = finalValue * 10 + d // b
-            a = carry * power + a % power
+            remainder = carry * power + remainder % power
     elif base == 16:
         finalValue = ""
-        a = a.upper()
+        a, b = str(a), str(b)
+        remainder = a.upper()
         b = b.upper()
 
         carry = 0
 
-        while int(a) > int(b):
-            if int(a[0]) < int(b):
-                digit_div = to_decimal(getFirstTwoChars(a), 16) // getLastCharSmart(b)
+        while int(remainder, 16) > int(b, 16):
+            if int(remainder[0]) < int(b):
+                digit_div = getFirstTwoChars(remainder) // getLastCharSmart(b)
                 finalValue = finalValue + toHex(digit_div)
-                carry = getFirstTwoChars(a) % getLastCharSmart(b)
-                a = str(carry) + a[2:]
+                carry = getFirstTwoChars(remainder) % getLastCharSmart(b)
+                remainder = str(carry) + remainder[2:]
             else:
-                digit_div = to_decimal(getFirstChar(a), 16) // getLastCharSmart(b)
+                digit_div = to_decimal(getFirstChar(remainder), 16) // getLastCharSmart(
+                    b
+                )
                 finalValue = finalValue + toHex(digit_div)
-                carry = getFirstTwoChars(a) % getLastCharSmart(b)
-                a = str(carry) + a[1:]
+                carry = getFirstTwoChars(remainder) % getLastCharSmart(b)
+                remainder = str(carry) + remainder[1:]
 
-    return finalValue, a
+    return finalValue, remainder
 
 
 # successive divisions (from BASE -> base) (@params: n, BASE, base)
-def successive_div_conversion(n, BASE, base):
-    pass
+def successive_div_conversion(n: str, BASE: int, base: int) -> str:
+    if BASE <= 10:
+        n = int(n)
+        list_of_remainders = []
+
+        while n > 0:
+            quotient, remainder = divide_1_digit(n, base, BASE)
+            list_of_remainders.append(remainder)
+            n = quotient
+        list_of_remainders.reverse()
+        s = "".join(str(elem) for elem in list_of_remainders)
+    elif BASE == 16:
+        list_of_remainders = []
+
+        while len(n) > 0:
+            quotient, remainder = divide_1_digit(n, base, BASE)
+            list_of_remainders.append(toHex(remainder))
+            n = quotient
+        list_of_remainders.reverse()
+        s = "".join(str(elem) for elem in list_of_remainders)
+
+    return s
 
 
 # substitution method
-def substitution_conversion():
-    pass
+def substitution_conversion(n: str, BASE: int, base: int) -> str:
+    if BASE <= 10:
+        # n = int(n)
+        _sum = 0
+
+        for i in range(0, len(str(n))):
+            digit = int(n[-1])
+            for _ in range(0, i):
+                digit = int(multiply_1_digit(digit, base, BASE))
+            _sum = add(_sum, str(digit), BASE)
+            n = n[:-1]
+    return _sum
 
 
 # conversions using 10 as an intermediate base
@@ -368,12 +401,16 @@ def rapid_conversions():
 # mainu
 if __name__ == "__main__":
     while True:
-        os.system("cls") if os.name == "nt" else os.system(
-            "clear"
-        )  # clear screen for windows and linux (dca vrei sa di clear screen in terminal si nu stii ce OS are userul; in cazul tau poti sa lasi doar os.system("clear"))
+        os.system("clear")  # TODO: remove if unnecessary or change to os.system("cls")
+        # clear screen for windows and linux (dca vrei sa di clear screen in terminal si nu stii ce OS are userul; in cazul tau poti sa lasi doar os.system("clear"))
+        print("Welcome to the number converter!\n")
+        print_menu()
         option = int(input("\nEnter an option from the menu: "))
         print("")
         if option == 1:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("clear") # TODO: remove if unnecessary or change to os.system("cls") for windows for windows
             print("Addition\n")
             base = int(input("Enter a base you want to work with: base = "))
             a = input(f"Enter number in base {base} a= ")
@@ -382,6 +419,9 @@ if __name__ == "__main__":
             input("Press any key to continue...")
 
         elif option == 2:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("clear") # TODO: remove if unnecessary or change to os.system("cls") for windows for windows
             print("Substraction\n")
             base = int(input("Enter a base you want to work with: base = "))
             a = input(f"Enter number in base {base} a= ")
@@ -390,6 +430,9 @@ if __name__ == "__main__":
             input("Press any key to continue...")
 
         elif option == 3:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
             print("Multiplication by 1 digit\n")
             base = int(input("Enter a base you want to work with: base = "))
             a = input(f"Enter number in base {base} a= ")
@@ -398,6 +441,9 @@ if __name__ == "__main__":
             input("Press any key to continue...")
 
         elif option == 4:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
             print("Division by 1 digit\n")
             base = int(input("Enter a base you want to work with: base = "))
             a = input(f"Enter number in base {base} a= ")
@@ -406,11 +452,29 @@ if __name__ == "__main__":
             print(res[0], "remainder", res[1])
             input("Press any key to continue...")
 
-        #     elif option == 5:
-        #         print("opt5")
+        elif option == 5:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
+            print("Conversion using successive divisions\n")
+            BASE = int(input("Enter a base you want to convert from: BASE = "))
+            base = int(input("Enter a base you want to convert to: base = "))
+            n = input(f"Enter number in base {BASE} n= ")
+            res = successive_div_conversion(n, BASE, base)
+            print("result: ", res)
+            input("Press any key to continue...")
 
-        #     elif option == 6:
-        #         print("opt6")
+        elif option == 6:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
+            print("Conversion using substitution method\n")
+            base = int(input("Enter a base you want to convert from: base = "))
+            BASE = int(input("Enter a base you want to convert to: BASE = "))
+            n = input(f"Enter number in base {base} n= ")
+            res = substitution_conversion(n, BASE, base)
+            print("result: ", res)
+            input("Press any key to continue...")
 
         #     elif option == 7:
         #         print("opt6")
