@@ -94,6 +94,9 @@ def getLastCharSmart(n: str) -> int:
     """
     return int(n[-1], 16)
 
+def getLastNChars(n: str, num: int) -> str:
+    return n[-num:]
+
 
 def getFirstTwoChars(n: str) -> int:
     """
@@ -558,9 +561,26 @@ def simple_conversion(n: str, BASE: int, base: int) -> str:
 
 
 # rapid conversions between 2 bases (base in {2, 4, 8 16})
-def rapid_conversions():
-    if BASE < base:
-        # TODO: implement
+def rapid_conversions(n: str, BASE: int, base: int) -> str:
+    res = ""
+    
+    groupings = {
+        4: 2,
+        8: 3,
+        16: 4
+    }
+    
+    if BASE != 2:
+        n = str(simple_conversion(n, BASE, base))
+    
+    while n:
+        digits = getLastNChars(n, groupings[base])
+        digits = substitution_conversion(digits, base, BASE)
+        res = res + str(digits)
+        n = n[:-groupings[base]] # remove last N digits from n (where N is the number of digits in the base you're converting to)
+    
+    return res
+
 
 
 # mainu
@@ -654,7 +674,16 @@ if __name__ == "__main__":
             input("Press any key to continue...")
 
         elif option == 8:
-            print("opt6")
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
+            print("Conversion using 10 as an intermediate base\n")
+            BASE = int(input("Enter a base you want to convert from: BASE ="))
+            base = int(input("Enter a base you want to convert to: base ="))
+            n = input(f"Enter number in base {BASE} n= ")
+            res = rapid_conversions(n, BASE, base)
+            print("result: ", res)
+            input("Press any key to continue...")
 
         elif option == 9:
             print("You exited the program, thank you!")
