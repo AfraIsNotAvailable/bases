@@ -47,7 +47,9 @@ def print_menu():
         4: "Divide a number by a digit in a given base",
         5: "Convert a number from a base to another using successive divisions",
         6: "Convert a number from a base to another using substitution method",
-        7: "Exit the program",
+        7: "Convert a number from a base to another using 10 as an intermediate base",
+        8: "Convert a number from a base to another using rapid conversions",
+        9: "Exit"
     }
     for key in menu_options.keys():
         print(key, "~", menu_options[key])
@@ -557,7 +559,8 @@ def simple_conversion(n: str, BASE: int, base: int) -> str:
 
 # rapid conversions between 2 bases (base in {2, 4, 8 16})
 def rapid_conversions():
-    pass
+    if BASE < base:
+        # TODO: implement
 
 
 # mainu
@@ -650,11 +653,12 @@ if __name__ == "__main__":
             print("result: ", res)
             input("Press any key to continue...")
 
-        #     elif option == 8:
-        #         print("opt6")
+        elif option == 8:
+            print("opt6")
 
         elif option == 9:
             print("You exited the program, thank you!")
+            print("Press any key to continue...")
             exit()
         else:
             print("Invalid option, please enter a number between 1 and 9.")
