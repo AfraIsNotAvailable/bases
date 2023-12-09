@@ -361,6 +361,8 @@ def multiply_1_digit(a, b, base):
     elif base == 16:
         finalValue = ""
         carry = 0
+        
+        a, b = str(a), str(b)
 
         maxx = max(len(a), len(b))
 
@@ -492,7 +494,6 @@ def substitution_conversion(n: str, BASE: int, base: int) -> str:
         str: The converted number in the new base.
     """
     if BASE <= 10:
-        # n = int(n)
         _sum = 0
         for i in range(0, len(str(n))):
             digit = int(n[-1])
@@ -500,12 +501,58 @@ def substitution_conversion(n: str, BASE: int, base: int) -> str:
                 digit = int(multiply_1_digit(digit, base, BASE))
             _sum = add(_sum, str(digit), BASE)
             n = n[:-1]
+    elif BASE == 16:
+        _sum = ""
+        for i in range(0, len(str(n))):
+            digit = n[-1]
+            for _ in range(0, i):
+                digit = multiply_1_digit(digit, base, BASE)
+            _sum = add(_sum, digit, BASE)
+            n = n[:-1]
     return _sum
 
 
 # conversions using 10 as an intermediate base
-def simple_conversion():
-    pass
+def simple_conversion(n: str, BASE: int, base: int) -> str:
+    if BASE <= 10:
+        n = int(n)
+        
+        res, power = 0, 1
+        while n > 0:
+            digit = n % 10
+            res += digit * power
+            power *= BASE
+            n //= 10
+        
+        n = res
+        res, power = 0, 1
+        
+        while n > 0:
+            digit = n % base
+            res += digit * power
+            power *= 10
+            n //= base
+    elif BASE == 16:
+        n = n.upper()
+        
+        res, power = 0, 1
+        while len(n) > 0:
+            digit = getLastCharSmart(n)
+            res += digit * power
+            power *= BASE
+            n = n[:-1]
+        
+        n = res
+        res, power = "", 1
+        
+        while n > 0:
+            digit = n % base
+            res = toHex(digit) + res
+            power *= 10
+            n //= base
+    
+    return res
+
 
 
 # rapid conversions between 2 bases (base in {2, 4, 8 16})
@@ -591,8 +638,17 @@ if __name__ == "__main__":
             print("result: ", res)
             input("Press any key to continue...")
 
-        #     elif option == 7:
-        #         print("opt6")
+        elif option == 7:
+            os.system(
+                "clear"
+            )  # TODO: remove if unnecessary or change to os.system("cls") for windows
+            print("Conversion using 10 as an intermediate base\n")
+            BASE = int(input("Enter a base you want to convert from: BASE ="))
+            base = int(input("Enter a base you want to convert to: base ="))
+            n = input(f"Enter number in base {BASE} n= ")
+            res = simple_conversion(n, BASE, base)
+            print("result: ", res)
+            input("Press any key to continue...")
 
         #     elif option == 8:
         #         print("opt6")
